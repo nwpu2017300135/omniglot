@@ -17,7 +17,7 @@ import os
 import scipy.misc
 from scipy.misc import imread, imresize
 from keras import regularizers
-os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
+os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 
 
 datasets_path = "/home/disk2/internship_anytime/zhangao/omni/omniglot/python/" 
@@ -108,26 +108,16 @@ gen = ImageDataGenerator()
 test_gen = ImageDataGenerator()
 train_generator = gen.flow(X_train, Y_train, batch_size=32)
 test_generator = test_gen.flow(X_test, Y_test, batch_size=32)
-model.compile(loss='categorical_crossentropy', optimizer=Adam(),metrics=['accuracy'])
-history=model.fit_generator(train_generator, epochs=100, 
-                    validation_data=test_generator)
-print(history.history.keys())
-# summarize history for accuracy
-plt.plot(history.history['acc'])
-plt.plot(history.history['val_acc'])
-plt.title('model accuracy')
-plt.ylabel('accuracy')
+lr_lsit=[0.01,0.001,0.0001,0.005,0.05,0.0005]
+for lr in lr_list:
+    model.compile(loss='categorical_crossentropy', optimizer=Adam(lr=lr),metrics=['accuracy'])
+    history=model.fit_generator(train_generator, epochs=100, validation_data=test_generator)
+    plt.plot(history.history['val_acc'])
+plt.title('val_acc')
 plt.xlabel('epoch')
-plt.legend(['train', 'test'], loc='upper left')
+plt.ylabel('acc')
+plt.legend(lr_lsit,loc='upper left')
 plt.savefig("acc.png")
-# summarize history for loss plt.plot(history.history['loss']) plt.plot(history.history['val_loss']) plt.title('model loss')
-plt.show()
-plt.plot(history.history['loss'])
-plt.plot(history.history['val_loss'])
-plt.ylabel('loss')
-plt.xlabel('epoch')
-plt.legend(['train', 'test'], loc='upper left')
-plt.savefig("omn.png")
 score = model.evaluate(X_test, Y_test)
 print()
 print('Test loss: ', score[0])
