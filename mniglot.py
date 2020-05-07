@@ -108,7 +108,7 @@ gen = ImageDataGenerator()
 test_gen = ImageDataGenerator()
 train_generator = gen.flow(X_train, Y_train, batch_size=32)
 test_generator = test_gen.flow(X_test, Y_test, batch_size=32)
-lr_list=[0.01,0.001,0.0001,0.005,0.05,0.0005]
+lr_list=[0.001,0.0001,0.005,0.05,0.0005]
 for lr in lr_list:
     model.compile(loss='categorical_crossentropy', optimizer=Adam(lr=lr),metrics=['accuracy'])
     history=model.fit_generator(train_generator, epochs=100, validation_data=test_generator)
