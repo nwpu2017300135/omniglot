@@ -17,10 +17,11 @@ import os
 import scipy.misc
 from scipy.misc import imread, imresize
 from keras import regularizers
-os.environ["CUDA_VISIBLE_DEVICES"] = "0"
+os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 
 
 datasets_path = "/home/disk2/internship_anytime/zhangao/omni/omniglot/python/" 
+#datasets_path="/home/zhangao/porject/omniglot/omniglot/python/"
 def load_images(path,n=0):
     X = []
     Y=[]
@@ -111,7 +112,7 @@ test_generator = test_gen.flow(X_test, Y_test, batch_size=32)
 lr_list=[0.001,0.0001,0.005,0.05,0.0005]
 for lr in lr_list:
     model.compile(loss='categorical_crossentropy', optimizer=Adam(lr=lr),metrics=['accuracy'])
-    history=model.fit_generator(train_generator, epochs=100, validation_data=test_generator)
+    history=model.fit_generator(train_generator, epochs=3, validation_data=test_generator)
     plt.plot(history.history['val_acc'])
 plt.title('val_acc')
 plt.xlabel('epoch')
